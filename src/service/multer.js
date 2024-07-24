@@ -1,5 +1,5 @@
 import multer from "multer";
-import { AppError } from "../../../utils/classError.js";
+import { AppError } from "../utils/classError.js";
 
 
 export const validExtension = {
@@ -7,7 +7,7 @@ export const validExtension = {
 }
 
 
-export const multerHost = (customValidation = ["image/png"]) => {
+export const multerHost = (customValidation) => {
  
   const storage = multer.diskStorage({});
 

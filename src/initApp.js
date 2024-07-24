@@ -18,6 +18,10 @@ export const initApp = (app, express) =>{
     app.use("/categories", routers.categoryRouter);
     app.use("/subcategories", routers.subCategoryRouter);
     app.use("/brands", routers.brandRouter);
+    app.use("/products", routers.productRouter);
+    app.use("/coupons", routers.couponRouter);
+    app.use("/cart", routers.cartRouter);
+    app.use("/order", routers.orderRouter);
     
     // handle invaild URLs
     app.use("*", (req, res, next) => {

@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { systemRoles } from "../../src/utils/systemRoles.js";
 
 const userSchema = Schema(
   {
@@ -35,7 +36,7 @@ const userSchema = Schema(
       type: Boolean,
       default: false,
     },
-    role: { type: String, enum: ["admin", "user"], default: "user" },
+    role: { type: String, enum: Object.values(systemRoles), default: "user" },
    passwordChangeAt: Date,
     code: String,
   },

@@ -7,7 +7,7 @@ import { AppError } from "../../utils/classError.js";
 
 // =========================================== SIGN UP ===========================================
 
-const registration = async (req, res, next) => {
+export const signUp = asyncHandler(async (req, res, next) => {
   const { name, email, password, cPassword, age, phone, address } = req.body;
 
   // Check if the user already exists
@@ -53,13 +53,11 @@ const registration = async (req, res, next) => {
   newUser
     ? res.status(201).json({ msg: "done", user: newUser })
     : next(new AppError("user not created", 500));
-};
-
-export const signUp = asyncHandler(registration);
+});
 
 // =========================================== VERIFY EMAIL ===========================================
 
-const confirm = async (req, res, next) => {
+export const confirmEmail = asyncHandler(async (req, res, next) => {
   const { token } = req.params;
   const decoded = jwt.verify(token, "generateTokenSecret");
   if (!decoded?.email) return next(new AppError("invalid token", 400));
@@ -73,13 +71,11 @@ const confirm = async (req, res, next) => {
   user
     ? res.status(201).json({ msg: "done" })
     : next(new AppError("user not found or already confirmed", 400));
-};
-
-export const confirmEmail = asyncHandler(confirm);
+});
 
 // =========================================== REFRESH TOKEN ===========================================
 
-const refresh = async (req, res, next) => {
+export const refreshToken = asyncHandler(async (req, res, next) => {
   const { rfToken } = req.params;
   const decoded = jwt.verify(rfToken, process.env.JWT_SECRET);
   if (!decoded?.email) return next(new AppError("invalid token", 400));
@@ -102,13 +98,11 @@ const refresh = async (req, res, next) => {
     `<a href=${link}>click here</a>`
   );
   res.status(200).json({ msg: "done" });
-};
-
-export const refreshToken = asyncHandler(refresh);
+});
 
 // =========================================== FORGET PASSWORD ===========================================
 
-const forget = async (req, res, next) => {
+export const forgetPassword = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
 
   const user = await userModel.findOne({ email: email.toLowerCase() });
@@ -128,13 +122,11 @@ const forget = async (req, res, next) => {
   await userModel.updateOne({ email }, { code: newCode });
 
   res.status(200).json({ msg: "done" });
-};
-
-export const forgetPassword = asyncHandler(forget);
+});
 
 // =========================================== RESET PASSWORD ===========================================
 
-const reset = async (req, res, next) => {
+export const resetPassword = asyncHandler(async (req, res, next) => {
   const { email, code, password } = req.body;
 
   const user = await userModel.findOne({ email: email.toLowerCase() });
@@ -149,16 +141,17 @@ const reset = async (req, res, next) => {
 
   const hash = bcrypt.hashSync(password, 5);
 
-  await userModel.updateOne({ email }, { password: hash, code: "", passwordChangeAt: Date.now() });
+  await userModel.updateOne(
+    { email },
+    { password: hash, code: "", passwordChangeAt: Date.now() }
+  );
 
   res.status(200).json({ msg: "done" });
-};
-
-export const resetPassword = asyncHandler(reset);
+});
 
 // =========================================== SIGN IN ===========================================
 
-const login = async (req, res, next) => {
+export const signIn = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await userModel.findOne({
     email: email.toLowerCase(),
@@ -182,6 +175,4 @@ const login = async (req, res, next) => {
   await userModel.updateOne({ email }, { loggedIn: true });
 
   res.status(200).json({ token });
-};
-
-export const signIn = asyncHandler(login);
+});
