@@ -9,4 +9,6 @@ const orderRouter = Router({mergeParams: true});
 
 orderRouter.post("/", auth(Object.values(systemRoles)), validation(addOrder), orders.addOrder);
 
+orderRouter.put("/:id", auth(Object.values(systemRoles)), validation(cancelOrder), orders.cancelOrder);
+
 export default orderRouter;

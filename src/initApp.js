@@ -22,6 +22,7 @@ export const initApp = (app, express) =>{
     app.use("/coupons", routers.couponRouter);
     app.use("/cart", routers.cartRouter);
     app.use("/order", routers.orderRouter);
+    app.use("/review", routers.reviewRouter);
     
     // handle invaild URLs
     app.use("*", (req, res, next) => {
