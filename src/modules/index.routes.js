@@ -7,6 +7,7 @@ import couponRouter from "./coupon/coupon.routes.js";
 import cartRouter from "./cart/cart.routes.js";
 import orderRouter from "./order/order.routes.js";
 import reviewRouter from "./review/review.routes.js";
+import wishListRouter from "./wishList/wishList.routes.js";
 
 export {
     userRouter,
@@ -18,4 +19,5 @@ export {
     cartRouter,
     orderRouter,
     reviewRouter,
+    wishListRouter,
 }

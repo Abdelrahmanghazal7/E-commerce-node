@@ -29,18 +29,24 @@ export const addCategory = asyncHandler(async (req, res, next) => {
       folder: `EcommerceC42/categories/${customId}`,
     }
   );
+  req.filePath = `EcommerceC42/categories/${customId}`
 
   // Create a new category
   const newCategory = await categoryModel.create({
     name,
     slug: slugify(name, {
-      replacement: "_",
       lower: true,
+      replacement: "_",
     }),
     image: { secure_url, public_id },
     customId,
     createdBy: req.user._id,
   });
+
+  req.data = {
+model: categoryModel,
+id: category._id
+  }
 
   newCategory
     ? res.status(201).json({ msg: "done", category: newCategory })

@@ -3,6 +3,8 @@ import connectionDB from "../db/connectionDB.js";
 import { AppError } from "../src/utils/classError.js";
 import { globalErrorHandling } from "../src/utils/globalErrorHandling.js";
 import dotenv from 'dotenv';
+import { deleteFromDb } from "./utils/deleteFromDb.js";
+import { deleteFromCloudinary } from "./utils/deleteFromCloudinary.js";
 
 export const initApp = (app, express) =>{
     dotenv.config();
@@ -23,6 +25,7 @@ export const initApp = (app, express) =>{
     app.use("/cart", routers.cartRouter);
     app.use("/order", routers.orderRouter);
     app.use("/review", routers.reviewRouter);
+    app.use("/wishList", routers.wishListRouter);
     
     // handle invaild URLs
     app.use("*", (req, res, next) => {
@@ -30,7 +33,7 @@ export const initApp = (app, express) =>{
     });
     
     // global error handler
-    app.use(globalErrorHandling);
+    app.use(globalErrorHandling, deleteFromCloudinary, deleteFromDb);
     
     app.listen(port, () => console.log(`app running on port ${port}`));
     

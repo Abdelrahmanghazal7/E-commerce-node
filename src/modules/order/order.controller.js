@@ -4,6 +4,8 @@ import cartModel from "../../../db/models/cart.model.js";
 import couponModel from "../../../db/models/coupon.model.js";
 import { asyncHandler } from "../../utils/globalErrorHandling.js";
 import { AppError } from "../../utils/classError.js";
+import { createInvoice } from "../../utils/pdf.js";
+import { sendEmail } from "../../service/sendEmail.js";
 
 // =========================================== addOrder ===========================================
 
@@ -82,6 +84,36 @@ for (const product of finalProducts) {
   if (flag) {
     await cartModel.updateOne({user: req.user._id},{products: []})
   }
+
+  // create pdf
+  const invoice = {
+    shipping: {
+      name: req.user.name,
+      address: req.user.address,
+      city: "Egypt",
+      state: "Miami",
+      country: "Alexandria",
+      postal_code: 94111
+    },
+    items: order.products,
+    subtotal: subPrice,
+    paid: order.totalPrice,
+    invoice_nr: order._id,
+    date: order.createdAt,
+    coupon: req.body?.coupon?.amount || 0
+  };
+  
+  await createInvoice(invoice, "invoice.pdf");
+
+  await sendEmail(
+    req.user.email,
+    "Order Placed",
+    "Your order has been placed successfully",
+    [{
+      path: "invoice.pdf",
+      contentType: "application/pdf"
+    }]
+  );
 
   res.status(201).json({ msg: "done", order });
 });
