@@ -151,8 +151,8 @@ export const addOrder = asyncHandler(async (req, res, next) => {
       metadata: {
         orderId: order._id.toString(),
       },
-      success_url: `${req.protocol}://${req.headers.host}/orders/success/${order._id}`,
-      cancel_url: `${req.protocol}://${req.headers.host}/orders/cancel/${order._id}`,
+      success_url: `${req.protocol}://${req.headers.host}/order/success/${order._id}`,
+      cancel_url: `${req.protocol}://${req.headers.host}/order/cancel/${order._id}`,
       line_items: order.products.map((product) => {
         return {
           price_data: {

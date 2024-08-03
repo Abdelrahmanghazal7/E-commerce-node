@@ -1,5 +1,7 @@
+import Stripe from 'stripe';
+
 export async function payment({
-  stripe,
+  stripe = new Stripe(process.env.stripe_secret),
   payment_method_types = ["card"],
   mode = "payment",
   customer_email,
