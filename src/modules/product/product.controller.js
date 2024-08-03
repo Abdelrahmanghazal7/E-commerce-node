@@ -1,11 +1,12 @@
 import productModel from "../../../db/models/product.model.js";
+import categoryModel from "../../../db/models/category.model.js";
+import subCategoryModel from "../../../db/models/subCategory.model.js";
+import brandModel from "../../../db/models/brand.model.js";
 import { asyncHandler } from "../../utils/globalErrorHandling.js";
 import { AppError } from "../../utils/classError.js";
 import { nanoid } from "nanoid";
 import slugify from "slugify";
 import cloudinary from "../../service/cloudinary.js";
-import categoryModel from "../../../db/models/category.model.js";
-import subCategoryModel from "../../../db/models/subCategory.model.js";
 import { apiFeatures } from "../../utils/apiFeatures.js";
 
 // =========================================== addproduct ===========================================
@@ -29,10 +30,7 @@ export const addProduct = asyncHandler(async (req, res, next) => {
   }
 
   // Check if the subCategory exist
-  const subCategoryExist = await subCategoryModel.findOne({
-    _id: subCategory,
-    category,
-  });
+  const subCategoryExist = await subCategoryModel.findOne({ _id: subCategory });
   if (!subCategoryExist) {
     return next(new AppError("subCategory not exist", 404));
   }
@@ -47,13 +45,13 @@ export const addProduct = asyncHandler(async (req, res, next) => {
   const productExist = await productModel.findOne({
     title: title.toLowerCase(),
   });
-  if (!productExist) {
+  if (productExist) {
     return next(new AppError("product already exist", 400));
   }
 
   const subPrice = price - (price * (discount || 0)) / 100;
 
-  if (!req.file) {
+  if (!req.files) {
     return next(new AppError("image is required", 404));
   }
 
@@ -98,18 +96,16 @@ export const addProduct = asyncHandler(async (req, res, next) => {
 // =========================================== getproducts ===========================================
 
 export const getProducts = asyncHandler(async (req, res, next) => {
-
   const apiFeature = new apiFeatures(productModel.find(), req.query)
-  .pagination()
-  .filter()
-  .sort()
-  .select()
-  .search()
+    .pagination()
+    .filter()
+    .sort()
+    .select()
+    .search();
 
   const products = await apiFeature.mongooseQuery;
   res.status(200).json({ msg: "done", page: apiFeature.page, products });
 });
-
 
 // =========================================== updateproduct ===========================================
 
@@ -125,7 +121,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
     description,
   } = req.body;
 
-  const {id} = req.params
+  const { id } = req.params;
 
   // Check if the category exist
   const categoryExist = await categoryModel.findOne({ _id: category });
@@ -134,10 +130,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
   }
 
   // Check if the subCategory exist
-  const subCategoryExist = await subCategoryModel.findOne({
-    _id: subCategory,
-    category
-  });
+  const subCategoryExist = await subCategoryModel.findOne({ _id: subCategory });
   if (!subCategoryExist) {
     return next(new AppError("subCategory not exist", 404));
   }
@@ -151,7 +144,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
   // Check if the product exist
   const product = await productModel.findOne({
     _id: id,
-    createdBy: req.user._id
+    createdBy: req.user._id,
   });
   if (!product) {
     return next(new AppError("product not exist", 400));
@@ -159,66 +152,69 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
 
   if (title) {
     if (title.toLowerCase() == product.title) {
-    return next(new AppError("title match old title", 409));
+      return next(new AppError("title match old title", 409));
     }
-    if (await productModel.findOne({title: title.toLowerCase()})) {
+    if (await productModel.findOne({ title: title.toLowerCase() })) {
       return next(new AppError("title already exist", 409));
-      }
-      product.title = title.toLowerCase()
-      product.slug = slugify(title, {
-        lower: true,
-        replacement: "_"
-      })
+    }
+    product.title = title.toLowerCase();
+    product.slug = slugify(title, {
+      lower: true,
+      replacement: "_",
+    });
   }
 
-if (description) {
-  product.description = description
-}
-
-if (stock) {
-  product.stock = stock
-}
-
-if (price & discount) {
-  product.subPrice = price - (price * (discount / 100))
-  product.price = price
-  product.discount = discount
-} else if (price) {
-product.subPrice = price - (price * (product.discount / 100))
-product.price = price
-} else if (discount) {
-  product.subPrice = product.price - (product.price * (discount / 100))
-  product.discount = discount
-}
-
-
-if (req.files) {
-  if (req.files?.image?.length) {
-    await cloudinary.uploader.destroy(product.image.public_id)
-    const { secure_url, public_id } = await cloudinary.uploader.upload(req.files.image[0].path,
-      {
-        folder: `Ecommerce/categories/${categoryExist.customId}/subCategory/${subCategoryExist.customId}/products/${product.customId}/mainImage`,
-      }
-    );
-    product.image = {secure_url, public_id}
+  if (description) {
+    product.description = description;
   }
 
-  if (req.files?.coverImages?.length) {
-    await cloudinary.api.delete_resources_by_prefix(`Ecommerce/categories/${categoryExist.customId}/subCategory/${subCategoryExist.customId}/products/${product.customId}/coverImages`)
-    let list = []
-    for (const file of req.files.coverImages) {
-      const { secure_url, public_id } = await cloudinary.uploader.upload(file.path,
+  if (stock) {
+    product.stock = stock;
+  }
+
+  if (price & discount) {
+    product.subPrice = price - price * (discount / 100);
+    product.price = price;
+    product.discount = discount;
+  } else if (price) {
+    product.subPrice = price - price * (product.discount / 100);
+    product.price = price;
+  } else if (discount) {
+    product.subPrice = product.price - product.price * (discount / 100);
+    product.discount = discount;
+  }
+
+  if (req.files) {
+    if (req.files?.image?.length) {
+      await cloudinary.uploader.destroy(product.image.public_id);
+      const { secure_url, public_id } = await cloudinary.uploader.upload(
+        req.files.image[0].path,
         {
-          folder: `Ecommerce/categories/${categoryExist.customId}/subCategory/${subCategoryExist.customId}/products/${product.customId}/coverImages`,
+          folder: `Ecommerce/categories/${categoryExist.customId}/subCategory/${subCategoryExist.customId}/products/${product.customId}/mainImage`,
         }
       );
-    list.push({ secure_url, public_id });
+      product.image = { secure_url, public_id };
     }
-  product.coverImages = list
-  }
-}
 
-await product.save()
+    if (req.files?.coverImages?.length) {
+      await cloudinary.api.delete_resources_by_prefix(
+        `Ecommerce/categories/${categoryExist.customId}/subCategory/${subCategoryExist.customId}/products/${product.customId}/coverImages`
+      );
+      let list = [];
+      for (const file of req.files.coverImages) {
+        const { secure_url, public_id } = await cloudinary.uploader.upload(
+          file.path,
+          {
+            folder: `Ecommerce/categories/${categoryExist.customId}/subCategory/${subCategoryExist.customId}/products/${product.customId}/coverImages`,
+          }
+        );
+        list.push({ secure_url, public_id });
+      }
+      product.coverImages = list;
+    }
+  }
+
+  await product.save();
 
   res.status(201).json({ msg: "done", product });
 });

@@ -17,15 +17,15 @@ export const addWishList = asyncHandler(async (req, res, next) => {
   if (!wishList) {
     const newWishList = await wishListModel.create({
       user: req.user._id,
-      products: [productId]
+      products: [productId],
     });
     return res.status(201).json({ msg: "done", wishList: newWishList });
   }
-await wishListModel.findOneAndUpdate(
-  {user: req.user._id},
-  {$addToSet: {products: productId}},
-  { new: true}
-)
+  await wishListModel.findOneAndUpdate(
+    { user: req.user._id },
+    { $addToSet: { products: productId } },
+    { new: true }
+  );
 
-   res.status(201).json({ msg: "done", wishList });
+  res.status(201).json({ msg: "done", wishList });
 });

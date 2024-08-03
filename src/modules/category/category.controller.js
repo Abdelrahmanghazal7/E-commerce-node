@@ -26,10 +26,10 @@ export const addCategory = asyncHandler(async (req, res, next) => {
   const { secure_url, public_id } = await cloudinary.uploader.upload(
     req.file.path,
     {
-      folder: `EcommerceC42/categories/${customId}`,
+      folder: `Ecommerce/categories/${customId}`,
     }
   );
-  req.filePath = `EcommerceC42/categories/${customId}`
+  req.filePath = `Ecommerce/categories/${customId}`;
 
   // Create a new category
   const newCategory = await categoryModel.create({
@@ -44,9 +44,9 @@ export const addCategory = asyncHandler(async (req, res, next) => {
   });
 
   req.data = {
-model: categoryModel,
-id: category._id
-  }
+    model: categoryModel,
+    id: newCategory._id,
+  };
 
   newCategory
     ? res.status(201).json({ msg: "done", category: newCategory })
@@ -65,7 +65,9 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
     createdBy: req.user._id,
   });
 
-  category && next(new AppError("category already exist", 400));
+  if (!category) {
+    return next(new AppError("category not exist", 400));
+  }
 
   if (name) {
     if (name.toLowerCase() === category.name) {
@@ -86,7 +88,7 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
     const { secure_url, public_id } = await cloudinary.uploader.upload(
       req.file.path,
       {
-        folder: `EcommerceC42/categories/${category.customId}`,
+        folder: `Ecommerce/categories/${category.customId}`,
       }
     );
     category.image = { secure_url, public_id };
@@ -102,14 +104,6 @@ export const getCategories = asyncHandler(async (req, res, next) => {
   const categories = await categoryModel
     .find({})
     .populate([{ path: "subCategories" }]);
-
-  // let list = []
-  //   for (let category of categories) {
-  //     const subCategories = await subCategoryModel.find({category: category._id})
-  //    const newCategory = category.toObject()
-  //    newCategory.subCategories = subCategories
-  //    list.push(newCategory)
-  //   }
 
   res.status(201).json({ msg: "done", categories });
 });

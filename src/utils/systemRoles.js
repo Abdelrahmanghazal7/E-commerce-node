@@ -1,5 +1,4 @@
-
 export const systemRoles = {
-    admin: "admin",
-    user: "user",
-}
+  admin: "admin",
+  user: "user",
+};

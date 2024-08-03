@@ -8,8 +8,20 @@ import { multerHost, validExtension } from "../../service/multer.js";
 
 const router = Router();
 
-router.post("/", auth(systemRoles.admin), multerHost(validExtension.image).single("image"), validation(addBrand), subCategories.addBrand);
+router.post(
+  "/",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).single("image"),
+  validation(addBrand),
+  subCategories.addBrand
+);
 
-router.put("/:id", auth(systemRoles.admin), multerHost(validExtension.image).single("image"), validation(updateBrand), subCategories.updateBrand);
+router.put(
+  "/:id",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).single("image"),
+  validation(updateBrand),
+  subCategories.updateBrand
+);
 
 export default router;

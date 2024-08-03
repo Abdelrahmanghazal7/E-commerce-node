@@ -4,17 +4,17 @@ export const sendEmail = async (to, subject, html, attachments = []) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "abdelrahmanghazal7@gmail.com",
-      pass: "yctapahfketvaafb",
+      user: process.env.emailSender,
+      pass: process.env.emailpassword,
     },
   });
 
   const info = await transporter.sendMail({
-    from: '"Ghazal7😎" <abdelrahmanghazal7@gmail.com>',
+    from: `"Ghazal7😎" <${process.env.emailSender}>`,
     to: to ? to : "",
     subject: subject ? subject : "hi👋",
     html: html ? html : "🖤",
-    attachments
+    attachments,
   });
 
   if (info.accepted.length) {

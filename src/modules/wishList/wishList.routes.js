@@ -5,8 +5,13 @@ import { validation } from "../../middleware/validation.js";
 import { addWishList } from "./wishList.validation.js";
 import { systemRoles } from "../../utils/systemRoles.js";
 
-const wishListRouter = Router({mergeParams: true});
+const wishListRouter = Router({ mergeParams: true });
 
-wishListRouter.post("/", auth(Object.values(systemRoles)), validation(addWishList), wishLists.addWishList);
+wishListRouter.post(
+  "/",
+  auth(Object.values(systemRoles)),
+  validation(addWishList),
+  wishLists.addWishList
+);
 
 export default wishListRouter;

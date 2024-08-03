@@ -5,7 +5,7 @@ export const validation = (schema) => {
     let arrayError = [];
     dataMethod.forEach((key) => {
       if (schema[key]) {
-        const { error } = schema[key].validate(req.body, { abortEarly: false });
+        const { error } = schema[key].validate(req[key], { abortEarly: false });
         if (error?.details) {
           error.details.forEach((err) => {
             arrayError.push(err.message);

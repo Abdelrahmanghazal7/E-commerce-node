@@ -1,9 +1,9 @@
 import joi from "joi";
-import {generalFields} from "../../utils/generalFields.js"
+import { generalFields } from "../../utils/generalFields.js";
 
 export const addCategory = {
   body: joi.object({
-    name: joi.string().min(3).max(100).required()
+    name: joi.string().min(3).max(100).required(),
   }),
   file: generalFields.file.required(),
   headers: generalFields.headers.required(),
@@ -11,7 +11,7 @@ export const addCategory = {
 
 export const updateCategory = {
   body: joi.object({
-    name: joi.string().min(3).max(100)
+    name: joi.string().min(3).max(100),
   }),
   file: generalFields.file,
   headers: generalFields.headers.required(),

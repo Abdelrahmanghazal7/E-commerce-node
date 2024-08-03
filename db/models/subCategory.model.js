@@ -9,25 +9,30 @@ const subCategorySchema = Schema(
       maxLength: 30,
       lowercase: true,
       trim: true,
-      unique: true
+      unique: true,
     },
     slug: {
       type: String,
       minLength: 3,
       maxLength: 30,
       trim: true,
-      unique: true
+      unique: true,
     },
     createdBy: {
       type: Types.ObjectId,
       ref: "user",
-      required: true
+      required: true,
+    },
+    category: {
+      type: Types.ObjectId,
+      ref: "category",
+      required: true,
     },
     image: {
       secure_url: String,
-      public_id: String
+      public_id: String,
     },
-    customId: String
+    customId: String,
   },
   {
     timestamps: true,

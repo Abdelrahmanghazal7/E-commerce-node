@@ -9,14 +9,34 @@ import { multerHost, validExtension } from "../../service/multer.js";
 
 const categoryRouter = Router();
 
-categoryRouter.use("/:categoryId/subCategories", subCategoryRouter)
+categoryRouter.use("/:categoryId/subCategories", subCategoryRouter);
 
-categoryRouter.post("/", auth(systemRoles.admin), multerHost(validExtension.image).single("image"), validation(addCategory), categories.addCategory);
+categoryRouter.post(
+  "/",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).single("image"),
+  validation(addCategory),
+  categories.addCategory
+);
 
-categoryRouter.put("/:id", auth(systemRoles.admin), multerHost(validExtension.image).single("image"), validation(updateCategory), categories.updateCategory);
+categoryRouter.put(
+  "/:id",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).single("image"),
+  validation(updateCategory),
+  categories.updateCategory
+);
 
-categoryRouter.get("/", auth(Object.values(systemRoles)), categories.getCategories);
+categoryRouter.get(
+  "/",
+  auth(Object.values(systemRoles)),
+  categories.getCategories
+);
 
-categoryRouter.delete("/:id", auth(systemRoles.admin), categories.deleteCategory);
+categoryRouter.delete(
+  "/:id",
+  auth(systemRoles.admin),
+  categories.deleteCategory
+);
 
 export default categoryRouter;

@@ -33,7 +33,7 @@ export const auth = (roles = []) => {
       return res.status(403).json({ msg: "not authorized" });
     }
 
-    if (parseInt(user.passwordChangeAt.getTime() / 1000) > decoded.iat) {
+    if (parseInt(user?.passwordChangeAt?.getTime() / 1000) > decoded.iat) {
       return res.status(409).json({ msg: "token expired please login again" });
     }
 

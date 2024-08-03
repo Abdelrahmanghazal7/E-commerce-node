@@ -1,5 +1,5 @@
 import joi from "joi";
-import {generalFields} from "../../utils/generalFields.js"
+import { generalFields } from "../../utils/generalFields.js";
 
 export const addCart = {
   body: joi.object({

@@ -1,5 +1,5 @@
 import joi from "joi";
-import {generalFields} from "../../utils/generalFields.js"
+import { generalFields } from "../../utils/generalFields.js";
 
 export const addProduct = {
   body: joi.object({
@@ -12,7 +12,7 @@ export const addProduct = {
     category: generalFields.id.required(),
     description: joi.string(),
   }),
-  file: joi.object({
+  files: joi.object({
     image: joi.array().items(generalFields.file.required()).required(),
     coverImages: joi.array().items(generalFields.file.required()).required(),
   }),
@@ -31,7 +31,7 @@ export const updateProduct = {
     description: joi.string(),
   }),
   params: joi.object({
-    id: generalFields.id.required()
+    id: generalFields.id.required(),
   }),
   file: joi.object({
     image: joi.array().items(generalFields.file),

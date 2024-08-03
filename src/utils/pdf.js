@@ -18,7 +18,7 @@ function generateHeader(doc) {
     .image("logo.png", 50, 45, { width: 50 })
     .fillColor("#444444")
     .fontSize(20)
-    .text("G7", 110, 57)
+    .text("Ecommerce", 110, 57)
     .fontSize(10)
     .text("ACME Inc.", 200, 50, { align: "right" })
     .text("123 Main Street", 200, 65, { align: "right" })
@@ -27,10 +27,7 @@ function generateHeader(doc) {
 }
 
 function generateCustomerInformation(doc, invoice) {
-  doc
-    .fillColor("#444444")
-    .fontSize(20)
-    .text("Invoice", 50, 160);
+  doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
 
   generateHr(doc, 185);
 
@@ -45,11 +42,7 @@ function generateCustomerInformation(doc, invoice) {
     .text("Invoice Date:", 50, customerInformationTop + 15)
     .text(formatDate(invoice.date), 150, customerInformationTop + 15)
     .text("Balance Due:", 50, customerInformationTop + 30)
-    .text(
-      formatCurrency(invoice.paid * 100),
-      150,
-      customerInformationTop + 30
-    )
+    .text(formatCurrency(invoice.paid * 100), 150, customerInformationTop + 30)
 
     .font("Helvetica-Bold")
     .text(invoice.shipping.name, 300, customerInformationTop)
@@ -94,7 +87,7 @@ function generateInvoiceTable(doc, invoice) {
       item.title,
       formatCurrency(item.price * 100),
       item.quantity,
-      formatCurrency(item.finalPrice)
+      formatCurrency(item.finalPrice * 100)
     );
 
     generateHr(doc, position + 20);
@@ -131,7 +124,7 @@ function generateInvoiceTable(doc, invoice) {
     "",
     "couponPercentage",
     "",
-   `${invoice.coupon}%`
+    `${invoice.coupon}%`
   );
   doc.font("Helvetica");
 }
@@ -151,6 +144,7 @@ function generateTableRow(
   doc,
   y,
   item,
+  description,
   unitCost,
   quantity,
   lineTotal
@@ -165,12 +159,7 @@ function generateTableRow(
 }
 
 function generateHr(doc, y) {
-  doc
-    .strokeColor("#aaaaaa")
-    .lineWidth(1)
-    .moveTo(50, y)
-    .lineTo(550, y)
-    .stroke();
+  doc.strokeColor("#aaaaaa").lineWidth(1).moveTo(50, y).lineTo(550, y).stroke();
 }
 
 function formatCurrency(cents) {

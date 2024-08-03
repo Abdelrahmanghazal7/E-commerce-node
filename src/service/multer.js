@@ -1,14 +1,11 @@
 import multer from "multer";
 import { AppError } from "../utils/classError.js";
 
-
 export const validExtension = {
-  image:["image/jpg", "image/png", "image/jpge"]
-}
-
+  image: ["image/jpg", "image/png", "image/jpeg"],
+};
 
 export const multerHost = (customValidation) => {
- 
   const storage = multer.diskStorage({});
 
   const fileFilter = function (req, file, cb) {

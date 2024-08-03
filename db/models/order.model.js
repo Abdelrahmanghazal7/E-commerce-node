@@ -5,31 +5,33 @@ const orderSchema = Schema(
     user: {
       type: Types.ObjectId,
       ref: "user",
-      required: true
+      required: true,
     },
-    products: [{
-      title: {
-type: String,
-required: true
+    products: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        productId: {
+          type: Types.ObjectId,
+          ref: "product",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        finalPrice: {
+          type: Number,
+          required: true,
+        },
       },
-      productId: {
-        type: Types.ObjectId,
-        ref: "product",
-        required: true
-      },
-      quantity: {
-        type: Number,
-        required: true,
-      },
-      price: {
-        type: Number,
-        required: true,
-      },
-      finalPrice: {
-        type: Number,
-        required: true,
-      }
-    }],
+    ],
     subPrice: {
       type: Number,
       required: true,
@@ -53,12 +55,19 @@ required: true
     paymentMethod: {
       type: String,
       required: true,
-      enum: ["card", "cash"]
+      enum: ["card", "cash"],
     },
     status: {
       type: String,
-      enum: ["placed", "waitPayment", "delivered", "onWay", "cancelled", "rejected"],
-      default: "placed"
+      enum: [
+        "placed",
+        "waitPayment",
+        "delivered",
+        "onWay",
+        "cancelled",
+        "rejected",
+      ],
+      default: "placed",
     },
     canceledBy: {
       type: Types.ObjectId,

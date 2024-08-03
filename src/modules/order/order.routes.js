@@ -5,10 +5,20 @@ import { validation } from "../../middleware/validation.js";
 import { addOrder, cancelOrder } from "./order.validation.js";
 import { systemRoles } from "../../utils/systemRoles.js";
 
-const orderRouter = Router({mergeParams: true});
+const orderRouter = Router({ mergeParams: true });
 
-orderRouter.post("/", auth(Object.values(systemRoles)), validation(addOrder), orders.addOrder);
+orderRouter.post(
+  "/",
+  auth(Object.values(systemRoles)),
+  validation(addOrder),
+  orders.addOrder
+);
 
-orderRouter.put("/:id", auth(Object.values(systemRoles)), validation(cancelOrder), orders.cancelOrder);
+orderRouter.put(
+  "/:id",
+  auth(Object.values(systemRoles)),
+  validation(cancelOrder),
+  orders.cancelOrder
+);
 
 export default orderRouter;

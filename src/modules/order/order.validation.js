@@ -1,5 +1,5 @@
 import joi from "joi";
-import {generalFields} from "../../utils/generalFields.js"
+import { generalFields } from "../../utils/generalFields.js";
 
 export const addOrder = {
   body: joi.object({
@@ -18,7 +18,7 @@ export const cancelOrder = {
     reason: joi.string().min(3),
   }),
   params: joi.object({
-    id: generalFields.id.required()
+    id: generalFields.id.required(),
   }),
   headers: generalFields.headers.required(),
 };

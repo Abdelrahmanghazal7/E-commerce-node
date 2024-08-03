@@ -22,7 +22,7 @@ export const addBrand = asyncHandler(async (req, res, next) => {
   const { secure_url, public_id } = await cloudinary.uploader.upload(
     req.file.path,
     {
-      folder: `EcommerceC42/brands/${customId}`,
+      folder: `Ecommerce/brands/${customId}`,
     }
   );
 
@@ -72,7 +72,7 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
     const { secure_url, public_id } = await cloudinary.uploader.upload(
       req.file.path,
       {
-        folder: `EcommerceC42/categories/${brand.customId}`,
+        folder: `Ecommerce/categories/${brand.customId}`,
       }
     );
     brand.image = { secure_url, public_id };

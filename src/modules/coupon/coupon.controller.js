@@ -9,7 +9,7 @@ export const addCoupon = asyncHandler(async (req, res, next) => {
 
   // Check if the coupon already exist
   const couponExist = await couponModel.findOne({ code: code.toLowerCase() });
-  if (!couponExist) {
+  if (couponExist) {
     return next(new AppError("coupon already exist", 409));
   }
 

@@ -37,7 +37,7 @@ const userSchema = Schema(
       default: false,
     },
     role: { type: String, enum: Object.values(systemRoles), default: "user" },
-   passwordChangeAt: Date,
+    passwordChangeAt: Date,
     code: String,
   },
   {

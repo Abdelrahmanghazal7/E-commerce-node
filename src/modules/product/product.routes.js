@@ -7,20 +7,32 @@ import { addProduct, updateProduct } from "./product.validation.js";
 import { systemRoles } from "../../utils/systemRoles.js";
 import { multerHost, validExtension } from "../../service/multer.js";
 
-const productRouter = Router({mergeParams: true});
+const productRouter = Router({ mergeParams: true });
 
-productRouter.use("/:productId/reviews", reviewRouter)
+productRouter.use("/:productId/reviews", reviewRouter);
 
-productRouter.post("/", auth(systemRoles.admin), multerHost(validExtension.image).fields([
-    {name: "image", maxCount: 1},
-    {name: "coverImages", maxCount: 3}
-]), validation(addProduct), products.addProduct);
+productRouter.post(
+  "/",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).fields([
+    { name: "image", maxCount: 1 },
+    { name: "coverImages", maxCount: 3 },
+  ]),
+  validation(addProduct),
+  products.addProduct
+);
 
 productRouter.get("/", auth(Object.values(systemRoles)), products.getProducts);
 
-productRouter.put("/:id", auth(systemRoles.admin), multerHost(validExtension.image).fields([
-    {name: "image", maxCount: 1},
-    {name: "coverImages", maxCount: 3}
-]), validation(updateProduct), products.updateProduct);
+productRouter.put(
+  "/:id",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).fields([
+    { name: "image", maxCount: 1 },
+    { name: "coverImages", maxCount: 3 },
+  ]),
+  validation(updateProduct),
+  products.updateProduct
+);
 
 export default productRouter;

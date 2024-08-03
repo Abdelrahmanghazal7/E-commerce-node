@@ -6,23 +6,23 @@ const reviewSchema = Schema(
       type: String,
       required: [true, "comment is required"],
       minLength: 3,
-      trim: true
+      trim: true,
     },
     rate: {
       type: Number,
       required: [true, "rate is required"],
       min: 1,
-      max: 5
+      max: 5,
     },
     createdBy: {
       type: Types.ObjectId,
       ref: "user",
-      required: true
+      required: true,
     },
     productId: {
       type: Types.ObjectId,
       ref: "product",
-      required: true
+      required: true,
     },
   },
   {

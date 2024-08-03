@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { sendEmail } from "../../service/sendEmail.js";
 import { asyncHandler } from "../../utils/globalErrorHandling.js";
 import { AppError } from "../../utils/classError.js";
+import { customAlphabet } from "nanoid";
 
 // =========================================== SIGN UP ===========================================
 
@@ -15,12 +16,12 @@ export const signUp = asyncHandler(async (req, res, next) => {
 
   userExist && next(new AppError("user already exist", 400));
 
-  const token = jwt.sign({ email }, "generateTokenSecret", {
+  const token = jwt.sign({ email }, process.env.JWT_SECRET, {
     expiresIn: 60 * 2,
   });
   const link = `${req.protocol}://${req.headers.host}/users/verifyEmail/${token}`;
 
-  const rftoken = jwt.sign({ email }, "generateRefreshTokenSecret", {
+  const rftoken = jwt.sign({ email }, process.env.JWT_SECRET, {
     expiresIn: 60 * 2,
   });
   const rflink = `${req.protocol}://${req.headers.host}/users/RefreshToken/${rftoken}`;
@@ -59,7 +60,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
 
 export const confirmEmail = asyncHandler(async (req, res, next) => {
   const { token } = req.params;
-  const decoded = jwt.verify(token, "generateTokenSecret");
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
   if (!decoded?.email) return next(new AppError("invalid token", 400));
 
   const user = await userModel.findOneAndUpdate(
@@ -169,9 +170,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
   }
 
   // Generate JWT token
-  const token = jwt.sign({ email, role: user.role }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  const token = jwt.sign({ email, role: user.role }, process.env.JWT_SECRET);
   await userModel.updateOne({ email }, { loggedIn: true });
 
   res.status(200).json({ token });

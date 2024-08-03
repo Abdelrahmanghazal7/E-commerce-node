@@ -6,12 +6,28 @@ import { addSubCategory, updateSubCategory } from "./subCategory.validation.js";
 import { systemRoles } from "../../utils/systemRoles.js";
 import { multerHost, validExtension } from "../../service/multer.js";
 
-const subCategoryRouter = Router({mergeParams: true});
+const subCategoryRouter = Router({ mergeParams: true });
 
-subCategoryRouter.post("/", auth(systemRoles.admin), multerHost(validExtension.image).single("image"), validation(addSubCategory), subCategories.addSubCategory);
+subCategoryRouter.post(
+  "/:categoryId",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).single("image"),
+  validation(addSubCategory),
+  subCategories.addSubCategory
+);
 
-subCategoryRouter.put("/:id", auth(systemRoles.admin), multerHost(validExtension.image).single("image"), validation(updateSubCategory), subCategories.updateSubCategory);
+subCategoryRouter.put(
+  "/:id",
+  auth(systemRoles.admin),
+  multerHost(validExtension.image).single("image"),
+  validation(updateSubCategory),
+  subCategories.updateSubCategory
+);
 
-subCategoryRouter.get("/", auth(Object.values(systemRoles)), subCategories.getSubCategories);
+subCategoryRouter.get(
+  "/",
+  auth(Object.values(systemRoles)),
+  subCategories.getSubCategories
+);
 
 export default subCategoryRouter;

@@ -10,14 +10,14 @@ import reviewRouter from "./review/review.routes.js";
 import wishListRouter from "./wishList/wishList.routes.js";
 
 export {
-    userRouter,
-    categoryRouter,
-    subCategoryRouter,
-    brandRouter,
-    productRouter,
-    couponRouter,
-    cartRouter,
-    orderRouter,
-    reviewRouter,
-    wishListRouter,
-}
+  userRouter,
+  categoryRouter,
+  subCategoryRouter,
+  brandRouter,
+  productRouter,
+  couponRouter,
+  cartRouter,
+  orderRouter,
+  reviewRouter,
+  wishListRouter,
+};
